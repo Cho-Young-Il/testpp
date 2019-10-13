@@ -1,0 +1,15 @@
+<?xml version="1.0" ?><svg height="32px" id="Layer_23" style="enable-background:new 0 0 32 32;" version="1.0" viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">
+	.Drop_x0020_Shadow{fill:none;}
+	.Round_x0020_Corners_x0020_2_x0020_pt{fill:#FFFFFF;stroke:#231F20;stroke-miterlimit:10;}
+	.Live_x0020_Reflect_x0020_X{fill:none;}
+	.Bevel_x0020_Soft{fill:url(#SVGID_1_);}
+	.Dusk{fill:#FFFFFF;}
+	.Foliage_GS{fill:#FFDD00;}
+	.Pompadour_GS{fill-rule:evenodd;clip-rule:evenodd;fill:#44ADE2;}
+	.st0{fill:#EE7622;}
+	.st1{fill:#B15226;}
+	.st2{fill:none;stroke:#FFFFFF;stroke-width:3.7154;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#FFFFFF;stroke-width:2.546;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#FFFFFF;stroke-width:1.6798;stroke-miterlimit:10;}
+	.st5{fill:#FFFFFF;}
+</style><linearGradient gradientUnits="userSpaceOnUse" id="SVGID_1_" x1="-141" x2="-140.2929" y1="-141" y2="-140.2929"><stop offset="0" style="stop-color:#DEDFE3"/><stop offset="0.1783" style="stop-color:#DADBDF"/><stop offset="0.3611" style="stop-color:#CECFD3"/><stop offset="0.546" style="stop-color:#B9BCBF"/><stop offset="0.7324" style="stop-color:#9CA0A2"/><stop offset="0.9181" style="stop-color:#787D7E"/><stop offset="1" style="stop-color:#656B6C"/></linearGradient><g id="XMLID_284_"><path class="st0" d="M27.2,31.6H4.7c-2.4,0-4.3-1.9-4.3-4.3V4.8c0-2.4,1.9-4.3,4.3-4.3h22.5c2.4,0,4.3,1.9,4.3,4.3   v22.5C31.5,29.7,29.6,31.6,27.2,31.6z" id="XMLID_98_"/><polygon class="st1" id="XMLID_97_" points="31.5,31.7 0.3,31.7 0.3,24 31.5,23.8  "/><path class="st2" d="M1.9,8.4c11.6-2.2,22.7,5.4,24.9,16.9" id="XMLID_558_"/><path class="st3" d="M4.4,14.2c7.9-1.5,15.5,3.7,17.1,11.6" id="XMLID_74_"/><path class="st4" d="M6.1,19.1c5.2-1,10.3,2.4,11.3,7.7" id="XMLID_112_"/><ellipse class="st5" cx="9.9" cy="25.7" id="XMLID_73_" rx="3.1" ry="3.1" transform="matrix(0.9824 -0.1866 0.1866 0.9824 -4.6206 2.2948)"/></g></svg>

@@ -17,7 +17,8 @@ app.set('view engine', 'ejs');
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use('/resource', express.static(path.join(process.env.NODE_PATH, 'public')));
+app.use('/resource', express.static(path.join(process.env.NODE_PATH, 'resource')));
+app.use('/imagetracerjs', express.static(path.join(process.env.NODE_PATH, 'imagetracerjs')));
 
 app.use(require('middleware/init'));
 

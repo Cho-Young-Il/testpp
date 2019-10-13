@@ -1,0 +1,13 @@
+<?xml version="1.0" ?><svg height="32px" id="Layer_8" style="enable-background:new 0 0 32 32;" version="1.0" viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">
+	.Drop_x0020_Shadow{fill:none;}
+	.Round_x0020_Corners_x0020_2_x0020_pt{fill:#FFFFFF;stroke:#231F20;stroke-miterlimit:10;}
+	.Live_x0020_Reflect_x0020_X{fill:none;}
+	.Bevel_x0020_Soft{fill:url(#SVGID_1_);}
+	.Dusk{fill:#FFFFFF;}
+	.Foliage_GS{fill:#FFDD00;}
+	.Pompadour_GS{fill-rule:evenodd;clip-rule:evenodd;fill:#44ADE2;}
+	.st0{fill:#ED3B94;}
+	.st1{fill:#AC266F;}
+	.st2{fill:#FFFFFF;}
+	.st3{fill:none;stroke:#FFFFFF;stroke-width:0.6761;stroke-miterlimit:10;}
+</style><linearGradient gradientUnits="userSpaceOnUse" id="SVGID_1_" x1="-47" x2="-46.2929" y1="-47" y2="-46.2929"><stop offset="0" style="stop-color:#DEDFE3"/><stop offset="0.1783" style="stop-color:#DADBDF"/><stop offset="0.3611" style="stop-color:#CECFD3"/><stop offset="0.546" style="stop-color:#B9BCBF"/><stop offset="0.7324" style="stop-color:#9CA0A2"/><stop offset="0.9181" style="stop-color:#787D7E"/><stop offset="1" style="stop-color:#656B6C"/></linearGradient><g id="XMLID_275_"><path class="st0" d="M27.1,31.3H4.9c-2.4,0-4.3-1.9-4.3-4.3V4.8c0-2.4,1.9-4.3,4.3-4.3h22.2c2.4,0,4.3,1.9,4.3,4.3   V27C31.4,29.4,29.5,31.3,27.1,31.3z" id="XMLID_76_"/><polygon class="st1" id="XMLID_75_" points="31.4,31.4 0.6,31.4 0.6,23.7 31.4,23.6  "/><circle class="st2" cx="19.6" cy="17.2" id="XMLID_613_" r="3.8"/><circle class="st2" cx="10" cy="17.4" id="XMLID_695_" r="3.8"/><path class="st3" d="M22.3,29H7.1C4.9,29,3,27.2,3,24.9V10.1C3,7.8,4.9,6,7.1,6h15.1c2.3,0,4.2,1.9,4.2,4.2v14.7   C26.4,27.2,24.6,29,22.3,29z" id="XMLID_667_"/></g></svg>

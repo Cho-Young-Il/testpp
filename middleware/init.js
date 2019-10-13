@@ -11,7 +11,7 @@ module.exports = (req, res, callback) => {
 	req.logger = log.logger(traceId)
 
 	res.on('finish', async () => {
-		const logdir = `${path.join(__dirname, '../log')}/${moment().format('YYYY/MM/DD')}`;
+		const logdir = `${path.join(__dirname, '../log')}/trace/${moment().format('YYYY/MM/DD')}`;
 		console.log(logdir);
 		const logfile = `${traceId}.log`;
 		const logpath = `${logdir}/${logfile}}`.replace(/\//g, path.sep);

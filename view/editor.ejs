@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>editor</title>
+	<style>
+		.c-drop-zone { width: 300px; height: 300px; border: 2px solid; }
+		.c-drag-enter { border: 2px dashed #2ECC71; background-color: #ABEBC6; }
+		#i-image-color-list { width: 500px; height: 50px; }
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-minicolors/2.3.4/jquery.minicolors.css">
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14H8c-1.66 0-3-1.34-3-3s1.34-3 3-3l.14.01C8.58 8.28 10.13 7 12 7c2.21 0 4 1.79 4 4h.5c1.38 0 2.5 1.12 2.5 2.5S17.88 16 16.5 16z"/></svg>
+<h1>icon</h1>
+<div id="i-canvas-container" class="c-drop-zone"></div>
+<div id="i-image-color-list"></div>
+<div id="i-after-icon-drop"></div>
+
+<hr/>
+
+<h1>screenshot</h1>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-minicolors/2.3.4/jquery.minicolors.js"></script>
+<script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
+<script>
+var EDITOR = function () {
+	'use strict';
+
+	var DROPZONE_CONST = {
+		FILE_ALLOW_EXT: ['jpeg', 'jpg', 'png'],
+		FILE_ALLOW_SIZE: 5, // MB
+		FILE_DROP_ONCE: 1,
+	};
+
+	var dropzone = $('#i-canvas-container');
+
+	var stage, layer, rect1, rect2, icon, mimetype, transformer;
+
+	var iconDropHandler = function (files) {
+		if (!files) {
+			return false;
+		}
+
+		if (files.length < 1 || files.length > DROPZONE_CONST.FILE_DROP_ONCE) {
+			return false;
+		}
+
+		var file = files[0];
+		var fileName = file.name;
+		var fileNames = fileName.split('.');
+		var ext = fileNames[fileNames.length - 1].toLowerCase();
+		var fileSize = file.size / 1024 / 1024;
+
+		if ($.inArray(ext, DROPZONE_CONST.FILE_ALLOW_EXT) === -1) {
+			return false;
+		}
+
+		if (fileSize > DROPZONE_CONST.FILE_ALLOW_SIZE) {
+			return false;
+		}
+
+		iconConvertAndGetRelatedColor(file, iconToCanvas);
+
+		return true;
+	};
+
+	var iconConvertAndGetRelatedColor = function (file, callback) {
+		var reader = new FileReader();
+		reader.onload = (function () {
+			return function (e) {
+				$.ajax({
+					method: 'post',
+					url: '/api/image/get-info',
+					data: {
+						'base64_data_url': e.target.result
+					},
+					dataType: 'json',
+					success: function (response) {
+						callback(response);
+					},
+					error: function (xhr, status, error) {
+						var response = xhr.responseJSON;
+					}
+				});
+			};
+		})();
+		reader.readAsDataURL(file);
+	};
+
+	var iconToCanvas = function (data) {
+		mimetype = data.mimetype;
+
+		$('#i-image-color-list').html('');
+		data.colors.forEach(function (color) {
+			$('#i-image-color-list').append('<button class="w3-button" style="background-color: ' + color + '" data-color="' + color + '">' + color + '</button>');
+		});
+
+		$('#i-after-icon-drop')
+			.html('')
+			.append('<div><input id="i-color-picker" data-control="hue"><div>')
+			.append('<input id="i-canvas-to-image" type="button" value="canvas to image">');
+		$('#i-canvas-to-image').on('click', canvasToImage);
+		$('#i-color-picker').each( function() {
+			$(this).minicolors({
+				control: $(this).attr('data-control') || 'hue',
+				defaultValue: $(this).attr('data-defaultValue') || '',
+				format: $(this).attr('data-format') || 'hex',
+				keywords: $(this).attr('data-keywords') || '',
+				inline: $(this).attr('data-inline') === 'true',
+				letterCase: $(this).attr('data-letterCase') || 'lowercase',
+				opacity: $(this).attr('data-opacity'),
+				position: $(this).attr('data-position') || 'bottom',
+				swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
+				change: function(hex) {
+					rect1.fill(hex);
+					layer.batchDraw();
+				},
+				theme: 'default'
+			});
+      	});
+
+
+		$('.w3-button').on('click', function () {
+			rect1.fill($(this).data('color'));
+			layer.batchDraw();
+		});
+
+		var canvas = $('#i-canvas-container');
+		var canvasWidth = canvas.innerWidth();
+		var canvasHeight = canvas.innerHeight();
+
+		stage = new Konva.Stage({
+			container: 'i-canvas-container',
+			width: canvasWidth,
+			height: canvasHeight
+		});
+
+		layer = new Konva.Layer();
+		stage.add(layer);
+
+		var image = new Image();
+		image.onload = function () {
+			rect1 = new Konva.Rect({
+				x: 0,
+				y: 0,
+				width: canvasWidth,
+				height: canvasHeight,
+				strokeWidth: 1
+			});
+
+			const rectWidth = canvasWidth * 0.6;
+			const rectHeight = canvasHeight * 0.6;
+
+			rect2 = new Konva.Rect({
+				x: (canvasWidth * 0.2),
+				y: (canvasHeight * 0.2),
+				width: rectWidth,
+				height: rectHeight,
+				stroke: 'black',
+				strokeWidth: 1
+			});
+
+			let iconWidth = rectWidth;
+			let iconHeight = rectHeight;
+
+			if (data.width > data.height) {
+				iconHeight = data.height * rectWidth / data.width;
+			} else {
+				iconWidth = data.width * rectHeight / data.height;
+			}
+
+			icon = new Konva.Image({
+				x: (canvasWidth - iconWidth) * 0.5,
+				y: (canvasHeight - iconHeight) * 0.5,
+				width: iconWidth,
+				height: iconHeight,
+				image: image,
+				draggable: false
+			});
+
+			layer.add(rect1);
+			layer.add(rect2);
+			layer.add(icon);
+
+			transformer = new Konva.Transformer({
+				centeredScaling: true,
+				boundBoxFunc: function (oldBoundBox, newBoundBox) {
+					if (Math.abs(newBoundBox.width > canvasWidth - stage.x()) || Math.abs(newBoundBox.height > canvasHeight - stage.y())) {
+						return oldBoundBox;
+					}
+
+					return newBoundBox;
+				}
+			});
+			layer.add(transformer);
+			transformer.attachTo(icon);
+
+			layer.draw();
+		};
+
+		image.src = data.base64_data_url;
+	};
+
+	var canvasToImage = function () {
+		if (rect2 && transformer) {
+			rect2.strokeEnabled(false);
+			transformer.borderEnabled(false);
+			transformer.resizeEnabled(false);
+			transformer.rotateEnabled(false);
+			layer.draw();
+		}
+		var dataURL = $('canvas')[0].toDataURL(mimetype);
+		var w = window.open('about:blank', 'image from canvas');
+  		w.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+  		if (rect2 && transformer) {
+			rect2.strokeEnabled(true);
+			transformer.borderEnabled(true);
+			transformer.resizeEnabled(true);
+			transformer.rotateEnabled(true);
+			layer.draw();
+		}
+
+		// TODO ajax
+	};
+
+	return {
+		init: function () {
+			dropzone.on('dragenter', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				if (!dropzone.hasClass('c-drag-enter')) {
+					dropzone.addClass('c-drag-enter')
+				}
+				return false;
+			}).on('dragover', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				return false;
+			}).on('dragleave', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				dropzone.removeClass('c-drag-enter');
+				return false;
+			}).on('drop', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				dropzone.removeClass('c-drag-enter');
+
+				iconDropHandler(e.originalEvent.dataTransfer.files);
+
+				return false;
+			});
+
+		}
+	}
+}();
+$(function () {
+	EDITOR.init();
+});
+</script>
+
+<div id="svgcontainer"></div>
+
+<script src="/imagetracerjs/imagetracer_v1.2.5.js"></script>
+<script type="text/javascript">
+	ImageTracer.imageToSVG(
+
+	'/resource/image/image5.png', /* input filename / URL */
+
+	function(svgstr){ ImageTracer.appendSVGString( svgstr, 'svgcontainer' ); }, /* callback function to run on SVG string result */
+	'default' /* Option preset */
+);
+</script>
+</body>
+</html>

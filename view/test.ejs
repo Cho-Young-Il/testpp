@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+* {box-sizing:border-box}
+
+/* Slide container */
+.slide-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Hide the images by default */
+.slides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+.c-icon-png {
+ background-color: #ffffff;
+ border: 1px solid;
+ width: 75px;
+ height: 75px;
+ margin: 2px;
+}
+	</style>
+
+</head>
+<body>
+
+<div class="slide-container">
+  <a class="prev">&#10094;</a>
+  <a class="next">&#10095;</a>
+</div><br>
+
+<!-- The dots/circles -->
+<div class="dot-container" style="text-align:center"></div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+var SLIDE = function () {
+	'use strict';
+
+	var icons = [];
+	var slideIndex = 1;
+
+	var showSlides = function (n) {
+		var i;
+		var slides = $('.slides');
+		var dots = $('.dot');
+		if (n > slides.length) {slideIndex = 1}
+		if (n < 1) {slideIndex = slides.length}
+		for (i = 0; i < slides.length; i++) {
+			$(slides[i]).hide();
+		}
+		for (i = 0; i < dots.length; i++) {
+			$(dots[i]).removeClass('active');
+		}
+
+		var slideHtml = ''
+		for (var i = 0; i < icons[n - 1].length; i += 2) {
+			slideHtml += '<a href="#" class="c-atag-icon-png" data-svg="/resource/icons/' + icons[n - 1][i + 1] + '/svg/' + icons[n - 1][i]  + '.svg"><img class="c-icon-png" src="/resource/icons/' + icons[n - 1][i + 1] + '/png/' + icons[n - 1][i]  + '.png" /></a>';
+		}
+		$('#slide' + (n - 1)).html(slideHtml);
+
+		$(slides[slideIndex-1]).show();
+		$(dots[slideIndex-1]).addClass('active');
+	}
+
+	// Next/previous controls
+	var plusSlides = function (n) {
+		showSlides(slideIndex += n);
+	}
+
+	// Thumbnail image controls
+	var currentSlide = function () {
+		showSlides(slideIndex = parseInt($(this).data('dot')));
+	}
+
+	return {
+		init: function () {
+			Array.prototype.division = function (n) {
+		        var arr = this;
+		        var len = arr.length;
+		        var cnt = Math.floor(len / n);
+		        console.log(cnt);
+		        var tmp = [];
+
+		        for (var i = 0; i <= cnt; i++) {
+		            tmp.push(arr.splice(0, n));
+		        }
+
+		        return tmp;
+			};
+
+			var getJSON = $.getJSON('/resource/icons.json');
+			getJSON.done(function (iconJSON) {
+				// TODO iconJSON suffle
+
+				for (var category in iconJSON) {
+					var categoryIcons = iconJSON[category];
+					categoryIcons = categoryIcons.join(':' + category + ':');
+					categoryIcons += ':' + category;
+					categoryIcons = categoryIcons.split(':');
+					icons = icons.concat(categoryIcons);
+				}
+
+				icons = icons.division(100);
+				console.log(icons);
+
+				for (var i = 0; i < icons.length; i++) {
+					$('.slide-container').append(
+						'<div class="slides">' +
+				    	'<div class="numbertext">' + (i + 1) + ' / ' + icons.length + '</div>' +
+				    	'<div id="slide' + i + '" style="width:100% height: 300px; background-color: grey; padding: 5%;">' +
+				    	'</div></div>'
+				  	);
+
+				  	$('.dot-container').append(
+						'<span class="dot" data-dot="' + (i + 1) + '"></span>'
+				  	);
+				}
+
+				$('.prev').on('click', function (e) {
+					e.preventDefault();
+					plusSlides(-1);
+				});
+				$('.next').on('click', function (e) {
+					e.preventDefault();
+					plusSlides(1);
+				});
+				$('.dot').on('click', currentSlide);
+				showSlides(slideIndex);
+			});
+		}
+	}
+}();
+
+$(function () {
+	SLIDE.init();
+})
+</script>
+
+</body>
+</html>

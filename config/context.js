@@ -10,7 +10,9 @@ const _screenshotCluster = async () => {
 
 	await cluster.task(async ({ page, data: url }) => {
 		await page.goto(url);
-		return await page.screenshot();
+		return await page.screenshot({
+			encoding: 'binary'
+		});
 	});
 
 	return cluster;
